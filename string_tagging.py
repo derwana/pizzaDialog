@@ -5,7 +5,7 @@ import pickle
 string_input = input("your input please: ")
 
 ## analyse input
-# tokenize words
+# tokenize string
 string_tokenised = nltk.word_tokenize(string_input)
 # count words
 print("You typed", len(string_tokenised), "words.")
