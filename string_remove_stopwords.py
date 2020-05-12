@@ -8,7 +8,7 @@
 import nltk
 from nltk.corpus import stopwords
 
-## get stopwors
+## get stopwords
 german_stop_words = stopwords.words('german')
 # german_stop_words contains the following:
 # ['aber', 'alle', 'allem', 'allen', 'aller', 'alles', 'als', 'also', 'am', 'an', 'ander', 'andere', 'anderem',
@@ -31,8 +31,12 @@ german_stop_words = stopwords.words('german')
 # 'werde', 'werden', 'wie', 'wieder', 'will', 'wir', 'wird', 'wirst', 'wo', 'wollen', 'wollte', 'würde', 'würden',
 # 'zu', 'zum', 'zur', 'zwar', 'zwischen']
 
-## make it a list to be faster
+## make it a set to be faster
 german_stop_set = set(german_stop_words)
+
+## remove some needed stopwords from set
+needed_words = ['mit', 'ohne', 'kein', 'extra', 'nicht']
+german_stop_set = [word for word in german_stop_set if word not in needed_words]
 
 ## read screen input
 string_input = input("your input please: ")
