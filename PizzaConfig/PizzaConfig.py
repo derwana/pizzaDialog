@@ -1,48 +1,25 @@
-def constant(f):
-    def fset(self, value):
-        raise TypeError
-    def fget(self):
-        return f()
-    return property(fget, fset)
-
-class _Const(object):
-    @constant
-    def SORTEN_LIST(self):
-        list = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
-        return list
-
-    @constant
-    def BELAG_LIST(self):
-        list = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat']
-        return list
-
-    @constant
-    def BODEN_LIST(self):
-        list = ['dick', 'normal', 'dünn']
-        return list
+import constants
 
 
-class PizzaConfig():
-    # set constants
-    CONST = _Const()
+class PizzaConfig:
 
     # init
     def __init__(self):
         self.boden = 'normal'
-        self.extra = [] # ['Salami', True]
+        self.extra = []  # ['Salami', True]
         self.sorte = ''
 
     # set methods
     def set_boden(self, boden):
-        if boden in self.CONST.BODEN_LIST():
+        if boden in constants.BODEN_LIST:
             self.boden = boden
 
     def set_extra(self, belag, status):
-        if belag in self.CONST.BELAG_LIST():
+        if belag in constants.BELAG_LIST:
             self.extra.append([belag, status])
 
     def set_sorte(self, sorte):
-        if sorte in self.CONST.SORTEN_LIST():
+        if sorte in constants.SORTEN_LIST:
             self.sorte = sorte
 
     # get methods

@@ -1,18 +1,20 @@
 import random
 import nltk
 from nltk.corpus import stopwords
+from PizzaConfig import PizzaConfig
 
 
 def rand_greeting():
     """Generates a random greeting from two given array and returns that greeting as string."""
     greetings = ['Guten Morgen', 'Hallo']
     question = [', was kann ich für Sie tun?', '!']
-    return (random.choice(greetings) + random.choice(question))
+    return random.choice(greetings) + random.choice(question)
 
 
 def rand_farewell():
     """Generates a random farewell from a given array and returns that farewell as string."""
-    farewells = ['Ihre Pizza wird in 5 Minuten geliefert!', 'Gut, kommt.', 'Die Pizza wird Ihnen in 5 Minuten geliefert.']
+    farewells = ['Ihre Pizza wird in 5 Minuten geliefert!', 'Gut, kommt.',
+                 'Die Pizza wird Ihnen in 5 Minuten geliefert.']
     return random.choice(farewells)
 
 
@@ -47,6 +49,7 @@ def string_works(string_input, stop_set):
 
 
 def main():
+    # list of all created pizzas
     pizzaList = []
 
     # generate stop set
@@ -55,24 +58,34 @@ def main():
     # random greeting
     print(rand_greeting())
 
-    # do-while
-    while(True):
+    # while
+    while True:
         # first input (stt)
         string_input = 'das ist ein Test'
 
         # tokenize and cutting stopwords
         string_works(string_input, german_stop_set)
 
-        # analysing input (add to list of PizzaConfig - create and fill class)
+        # analysing input
+
+        # create and fill class
+        pizza = PizzaConfig.PizzaConfig()
+        pizza.set_boden('dick')
 
         # check if sorte
         # ask belag
         # ask boden
 
+        # add created pizza to list
+        pizzaList.append(pizza)
+
         # ask "noch etwas" (second pizza)
+        if True:
+            break
 
     # random bye
     print(rand_farewell())
+
 
 # run Main Function
 main()
