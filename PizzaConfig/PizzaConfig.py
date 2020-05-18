@@ -27,12 +27,16 @@ class PizzaConfig():
     CONST = _Const()
 
     # init
-    def __init__(self, name):
-        self.sorte = ''
+    def __init__(self):
         self.boden = 'normal'
         self.extra = [] # ['Salami', True]
+        self.sorte = ''
 
     # set methods
+    def set_boden(self, boden):
+        if boden in self.CONST.BODEN_LIST():
+            self.boden = boden
+
     def set_extra(self, belag, status):
         if belag in self.CONST.BELAG_LIST():
             self.extra.append([belag, status])
@@ -41,16 +45,31 @@ class PizzaConfig():
         if sorte in self.CONST.SORTEN_LIST():
             self.sorte = sorte
 
-    def set_boden(self, boden):
-        if boden in self.CONST.BODEN_LIST():
-            self.boden = boden
-
     # get methods
+    def get_boden(self):
+        return self.boden
+
     def get_extra(self):
         return self.extra
 
     def get_sorte(self):
         return self.sorte
 
-    def get_boden(self):
-        return self.boden
+    # check methods
+    def check_boden(self):
+        if self.get_boden():
+            return True
+        else:
+            return False
+
+    def check_extra(self):
+        if self.get_extra():
+            return True
+        else:
+            return False
+
+    def check_sorte(self):
+        if self.get_sorte():
+            return True
+        else:
+            return False
