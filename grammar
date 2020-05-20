@@ -1,0 +1,35 @@
+S -> P B M O
+S -> P B O M
+S -> P B O
+S -> P O B
+S -> P M B
+S -> P B M
+S -> P O M
+S -> P M O
+S -> P O
+S -> P B
+S -> P M
+S -> P
+P -> SORTE 'Pizza'
+P -> 'Pizza' SORTE
+SORTE -> 'Salami'
+SORTE -> 'Hawaii'
+SORTE -> 'Margaritha'
+SORTE -> 'Spinat'
+M -> 'mit' BELAG
+M -> 'zusätzlich' BELAG
+M -> 'extra' BELAG
+M -> 'mit' M
+O -> 'ohne' BELAG
+BELAG -> BELAG BELAG
+BELAG -> 'Salami'
+BELAG -> 'Schinken'
+BELAG -> 'Ananas'
+BELAG -> 'Tomate'
+BELAG -> 'Peperoni'
+BELAG -> 'Käse'
+BELAG -> 'Spinat'
+B -> 'mit' ART
+ART -> 'dünnem' BODEN
+ART -> 'dickem' BODEN
+BODEN -> 'Boden'
