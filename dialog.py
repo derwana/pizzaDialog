@@ -1,7 +1,9 @@
 import random
 import nltk
+from nltk import CFG
 from nltk.corpus import stopwords
 from PizzaConfig import PizzaConfig
+from constants import *
 
 
 def rand_greeting():
@@ -48,7 +50,37 @@ def string_works(string_input, stop_set):
     return tokenized_output
 
 
+def parse_sentence(parser, sentence):
+    """parses given sentence with given parser into a tree and return its bigram"""
+    trees = parser.parse(sentence)
+    bigram = []
+
+    for tree in trees:
+        # print(tree)
+        bigram.append(tree.pos())
+
+    return bigram
+
+
+def parse_bigram(bigram, pizza):
+    """parses given bigram and sets variables of given pizza object accordingly"""
+    for unnoetig in bigram:
+        for pos in unnoetig:
+            if pos[1] == "SORTE":
+                pizza.set_sorte(pos[0])
+            if pos[1] == "MBELAG":
+                pizza.set_extra(pos[0])
+            if pos[1] == "OBELAG":
+                pizza.set_out(pos[0])
+            if pos[1] == "ART":
+                pizza.set_boden(pos[0])
+
+
 def main():
+    # load grammar and its parser
+    grammar = CFG.fromstring(GRAMMAR)
+    parser = nltk.ChartParser(grammar)
+
     # list of all created pizzas
     pizzaList = []
 
@@ -60,20 +92,20 @@ def main():
 
     # while
     while True:
-        # first input (stt)
-        string_input = 'das ist ein Test'
-
-        # tokenize and cutting stopwords
-        string_works(string_input, german_stop_set)
-
-        # analysing input
-
-        # create and fill class
+        # create a new pizza
         pizza = PizzaConfig.PizzaConfig()
-        pizza.set_boden('dick')
-        pizza.set_extra('Tomate', 'extra')
-        pizza.set_extra('Käse', 'ohne')
-        pizza.set_sorte('Salami')
+
+        # first input (stt)
+        string_input = 'Pizza Salami mit extra Käse Salami ohne Oliven mit dünnem Boden'
+
+        # tokenize and cutting stopwords from input-string
+        string_input = string_works(string_input, german_stop_set)
+
+        # parse the input-string into a bigram
+        bigram = parse_sentence(parser, string_input)
+
+        # parse the bigram and set variables in pizza
+        parse_bigram(bigram, pizza)
 
         # check if sorte
         # ask belag
@@ -91,7 +123,7 @@ def main():
 
     # print order
     for pizza in pizzaList:
-        print(pizza.get_sorte(), pizza.get_boden(), pizza.get_extra())
+        print(pizza.get_sorte(), pizza.get_boden(), pizza.get_extra(), pizza.get_out())
 
 # run Main Function
 main()
