@@ -29,6 +29,8 @@ def generate_custom_stop_set():
     # remove some needed stopwords from set
     needed_words = ['mit', 'ohne', 'kein', 'extra', 'nicht']
     german_stop_set = [word for word in german_stop_set if word not in needed_words]
+    # add some stopwords
+    german_stop_set.append('bitte')
 
     return german_stop_set
 
@@ -76,6 +78,44 @@ def parse_bigram(bigram, pizza):
                 pizza.set_boden(pos[0])
 
 
+def process_information(stop_set, parser, string_input, pizza):
+    """wrapper for string_works(), parse_sentence() and parse_bigram()"""
+    # tokenize and cutting stopwords from input-string
+    string_input = string_works(string_input, stop_set)
+
+    # parse the input-string into a bigram
+    bigram = parse_sentence(parser, string_input)
+
+    # parse the bigram and set variables in pizza
+    parse_bigram(bigram, pizza)
+
+
+def reask_sorte(stop_set, parser, pizza):
+    """checks if pizza.sorte is set, reasks and processes a new input to set it"""
+    if not pizza.check_sorte():
+        print('keine Sorte gewählt, wie kann ich Ihnen helfen')
+
+        string_input = 'eine Salami Pizza bitte'
+
+        process_information(stop_set, parser, string_input, pizza)
+
+        # maybe do a recursion for rechecking with:
+        # reask_sorte(stop_set, parser, pizza)
+
+#def reask_extras(stop_set, parser, pizza):
+#    if not pizza.check_extra() or not pizza.check_out():
+#        print('haben Sie Extra-Wünsche?')
+#
+#        string_input = 'ja'
+#
+#        if string_input in NEGATION:
+#            print('keine Extras gewählt')
+#        else:
+#            print('Welche Extra-Wünsche haben Sie?')
+#            string_input = 'extra Käse und Salami'
+#            process_information(stop_set, parser, string_input, pizza)
+
+
 def main():
     # load grammar and its parser
     grammar = CFG.fromstring(GRAMMAR)
@@ -96,20 +136,17 @@ def main():
         pizza = PizzaConfig.PizzaConfig()
 
         # first input (stt)
-        string_input = 'Pizza Salami mit extra Käse Salami ohne Oliven mit dünnem Boden'
+        #string_input = 'Pizza Salami mit extra Käse und Salami, ohne Oliven, aber mit dünnem Boden'
+        string_input = 'eine Pizza bitte'
 
-        # tokenize and cutting stopwords from input-string
-        string_input = string_works(string_input, german_stop_set)
+        # doing string works, parsing and value-assignments for pizza
+        process_information(german_stop_set, parser, string_input, pizza)
 
-        # parse the input-string into a bigram
-        bigram = parse_sentence(parser, string_input)
+        # check if pizza.sorte is set
+        reask_sorte(german_stop_set, parser, pizza)
 
-        # parse the bigram and set variables in pizza
-        parse_bigram(bigram, pizza)
-
-        # check if sorte
-        # ask belag
-        # ask boden
+        # check if extras
+        #reask_extras(german_stop_set, parser, pizza)
 
         # add created pizza to list
         pizzaList.append(pizza)
