@@ -71,6 +71,9 @@ def main():
         # create and fill class
         pizza = PizzaConfig.PizzaConfig()
         pizza.set_boden('dick')
+        pizza.set_extra('Tomate', 'extra')
+        pizza.set_extra('Käse', 'ohne')
+        pizza.set_sorte('Salami')
 
         # check if sorte
         # ask belag
@@ -86,6 +89,9 @@ def main():
     # random bye
     print(rand_farewell())
 
+    # print order
+    for pizza in pizzaList:
+        print(pizza.get_sorte(), pizza.get_boden(), pizza.get_extra())
 
 # run Main Function
 main()
