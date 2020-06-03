@@ -1,3 +1,6 @@
+import nltk
+from nltk import CFG
+
 GRAMMAR = CFG.fromstring("""
 S -> P M O B
 S -> P O M B
@@ -18,12 +21,13 @@ N -> 'Pizza'
 P -> SORTE
 P -> SORTE 'Pizza'
 P -> 'Pizza' SORTE
-SORTE -> 'Salami'|'Hawaii'|'Margaritha'|'Spinat'
+SORTE -> 'Salami'|'Hawaii'|'Margaritha'|'Spinat'|'Margarita'|'Margherita'
 M -> 'mit' MBELAG
 M -> 'zusätzlich' MBELAG
 M -> 'extra' MBELAG
 M -> 'mit' M
 O -> 'ohne' OBELAG
+O -> 'kein' OBELAG
 MBELAG -> MBELAG MBELAG
 MBELAG -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
 OBELAG -> OBELAG OBELAG
@@ -35,19 +39,14 @@ BODEN -> 'Boden'
 
 PARSER = nltk.ChartParser(GRAMMAR)
 
-# sortengrammar = CFG.fromstring("""
-# S -> SORTE
-# S -> SORTE 'Pizza'
-# S -> 'Pizza' SORTE
-# SORTE -> 'Salami'|'Hawaii'|'Margaritha'|'Spinat'
-# """)
-
-# sortenparser = nltk.ChartParser(sortengrammar)
 
 BODENGRAMMAR = CFG.fromstring("""
-S -> BODEN
+S -> B
+S -> ART
 B -> 'mit' ART
 ART -> 'dünnem' BODEN|'dickem' BODEN
+ART -> 'dünnen' BODEN|'dicken' BODEN
+ART -> 'dick'|'dünn'
 BODEN -> 'Boden'
 """)
 
