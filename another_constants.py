@@ -1,6 +1,10 @@
 import nltk
 from nltk import CFG
 
+SORTEN_LIST = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
+BELAG_LIST = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat', 'Oliven']
+BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
+
 GRAMMAR = CFG.fromstring("""
 S -> P M O B
 S -> P O M B
@@ -36,7 +40,6 @@ B -> 'mit' ART
 ART -> 'dünnem' BODEN|'dickem' BODEN
 BODEN -> 'Boden'
 """)
-
 PARSER = nltk.ChartParser(GRAMMAR)
 
 
@@ -46,17 +49,16 @@ S -> ART
 B -> 'mit' ART
 ART -> 'dünnem' BODEN|'dickem' BODEN
 ART -> 'dünnen' BODEN|'dicken' BODEN
-ART -> 'dick'|'dünn'
+ART -> 'dick'|'dünn'|'dickem'|'dicken'|'dickes'|'normal'|'normalen'|'normalem'|'normales'|'dünnem'|'dünnen'|'dünnes'
 BODEN -> 'Boden'
 """)
-
 BODENPARSER = nltk.ChartParser(BODENGRAMMAR)
+
 
 ALLESGRAMMAR = CFG.fromstring("""
 S -> JA
 S -> NEIN
-NEIN -> 'nein'
-JA -> 'ja'
+NEIN -> 'nein'|'nö'|'nee'
+JA -> 'ja'|'jo'|'jep'
 """)
-
 ALLESPARSER = nltk.ChartParser(ALLESGRAMMAR)

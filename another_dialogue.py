@@ -7,19 +7,18 @@ from nltk import CFG
 from nltk.corpus import stopwords
 from PizzaConfig import *
 from PizzaConfig import PizzaConfig
-
 import speech_recognition as sr
 from gtts import gTTS
 import pyttsx3
 from pyttsx3 import drivers
-from another_constants import *
+from another_constants import PARSER, BODENPARSER, ALLESPARSER
 
 #%%
 def generate_custom_stop_set():
     """Generates and returns custom german set of stopwords"""
     # get stopwords
     german_stop_words = stopwords.words('german')
-    german_stop_words.extend(('guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib', 'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne'))
+    german_stop_words.extend(('bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib', 'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -37,7 +36,7 @@ def rand_greeting():
 def rand_farewell():
     """Generates a random farewell from a given array and returns that farewell as string."""
     farewells = ['Ihre Pizza wird in 5 Minuten geliefert!', 'Gut, kommt.',
-                 'Die Pizza wird Ihnen in 5 Minuten geliefert.']
+                 'Die Pizza wird Ihnen in 5 Minuten geliefert.', 'Danke fuer Ihre Bestellung']
     return random.choice(farewells)
 
 def rand_nachfrage():
@@ -48,9 +47,14 @@ def rand_nachfrage():
 
 def rand_alles():
     """Generates a random question from a given array and returns that question as string."""
-    nachfrage = ["Ist das alles?", "Kann ich noch etwas für Sie tun?",
-                 "Haben Sie noch einen Wunsch?", "Noch etwas?"]
+    nachfrage = ["Haben Sie noch einen Wunsch?", "Kann ich noch etwas fuer Sie tun?",
+                 "Noch etwas?"]
     return random.choice(nachfrage)
+
+def rand_boden():
+    """Generates a random question from a given array and returns that question as string."""
+    boden = ["Wuenschen Sie einen duennen, dicken oder normalen Boden?", "Okay, duenner oder dicker Boden?"]
+    return random.choice(boden)
 
 def my_listen(source, engine, r):
     """STT: Listens to microphone and returns recognized string."""
@@ -84,46 +88,32 @@ def string_works(string_input, stop_set):
     return tokenized_output
 
 def analyse(text, pizza):
-    #sentence = text.split()
     
-    # sorte = ""
-    # mbelag = []
-    # obelag = []
-    # boden = ""
-
     trees = PARSER.parse(text)
     bigram = []
     for tree in trees:
-        #print(tree)
         bigram.append(tree.pos())
         print(bigram)
     
     for unnoetig in bigram:
         for pos in unnoetig:
             if pos[1] == "SORTE":
-                print("Ich bin hier.")
-                pizza.set_sorte(pizza, pos[0])
+                pizza.set_sorte(pos[0])
                 #sorte = pos[0]
             if pos[1] == "MBELAG":
-                pizza.set_extra(pizza, pos[0])
+                pizza.set_extra(pos[0])
                 #mbelag.append(pos[0])
             if pos[1] == "OBELAG":
-                pizza.set_out(pizza, pos[0])
+                pizza.set_out(pos[0])
                 #obelag.append(pos[0])
             if pos[1] == "ART":
                 # boden = pos[0]
-                pizza.set_boden(pizza, pos[0])
-            #if pos[1] == "N":
-                #return ["",[],[],""]
-    #pizza = [sorte, mbelag, obelag, boden]
-    #return pizza
+                pizza.set_boden(pos[0])
 
-def analyse_boden(text):
-    sentence = text.split()
-   
-    trees = BODENPARSER.parse(sentence)
+def analyse_boden(text, pizza):
+
+    trees = BODENPARSER.parse(text)
     bigram = []
-    boden = ""
     for tree in trees:
         #print(tree)
         bigram.append(tree.pos())
@@ -131,8 +121,7 @@ def analyse_boden(text):
     for unnoetig in bigram:
         for pos in unnoetig:
             if pos[1] == "BODEN":
-                boden = pos[0]
-    return boden
+                pizza.set_boden = pos[0]
 
 def analyse_alles(text):
    
@@ -151,40 +140,27 @@ def analyse_alles(text):
                 alles = 0
     return alles
 
+def check_complete(pizza):
+    sorte = 0
+    boden = 0
+
+    if(pizza.get_sorte() != ''):
+        sorte = 1
+    if(pizza.get_boden() != 'normal'):
+        boden = 1
+
+    return [sorte, boden]
+
 def say_begruessung(engine):
     engine.say(rand_greeting())
     engine.runAndWait()
-    
-def complete(pizza):
-    s = 0
-    m = 0
-    o = 0
-    #b = 0
-
-    if(pizza.get_sorte() != ''):
-        s = 1
-    if(pizza.get_extra() != []):
-        m = 1
-    if(pizza.get_out != []):
-        o = 1
-
-    # if(pizza[0] != ""):
-    #     s = 1
-    # if(pizza[1] != []):
-    #     m = 1
-    # if(pizza[2] != []):
-    #     o = 1
-    # if(pizza[3] != ""):
-    #     b = 1
-    complete = [s, m, o]
-    return complete
 
 def ask_sorte(engine):
     engine.say(rand_nachfrage())
     engine.runAndWait()
     
 def ask_boden(engine):
-    engine.say("Wuenschen Sie einen duennen oder dicken Boden?")
+    engine.say(rand_boden())
     engine.runAndWait()
     
 def ask_alles(engine):
@@ -201,10 +177,6 @@ def main():
 
     r = sr.Recognizer()
 
-
-    #pizza = []
-
-    pizzaList = []
     german_stop_set = generate_custom_stop_set()
 
     running = 1
@@ -217,34 +189,40 @@ def main():
 
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)
+
             analyse(satz, pizza)
-            komplett = complete(pizza)
-            print(pizza)
-            print(komplett)
-            
-            while(komplett[0] != 1):
-                ask_sorte(engine)
+            complete = check_complete(pizza)
+
+            print(complete)
+
+            if(complete[0] == 1):
+                ask_boden(engine)
+
                 satz = my_listen(source, engine, r)
                 satz = string_works(satz, german_stop_set)
-                #sorte = analyse(satz)
+
+                analyse_boden(satz, pizza)
+            
+            while(complete[0] != 1):
+                ask_sorte(engine)
+
+                satz = my_listen(source, engine, r)
+                satz = string_works(satz, german_stop_set)
+
                 analyse(satz, pizza)
-                #pizza = sorte
-                komplett = complete(pizza)
-                
-            # while(komplett[3] != 1):
-            #     ask_boden(engine)
-            #     satz = my_listen(source, engine, r)
-            #     boden = analyse_boden(satz)
-            #     pizza[3] = boden
-            #     komplett = complete(pizza)
-                
+                complete = check_complete(pizza)
+            
             ask_alles(engine)
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)
             running = analyse_alles(satz)
             
-        if(analyse_alles(satz)):
-            say_kommt(engine)
+        say_kommt(engine)
+        sorte = pizza.get_sorte
+        extra = pizza.get_extra
+        out = pizza.get_out
+        boden = pizza.get_boden
+        print(sorte, extra, out, boden)
     
 #%%
 main()
