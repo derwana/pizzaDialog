@@ -1,53 +1,19 @@
-# aufgabe4
+# Hilfe zur Installation
+Eine Schritt für Schritt Anleitung für die Installation von Python und aller benötigter Pakete. Wir gehen hier von einer Windows-Installation aus
 
-### POS tags
+## Python
+1. Lade dir `Python 3.7.7` herunter, damit wurde gecodet und getestet (aber eigentlich müsste auch `3.8.3` funktionieren).
+2. Führe das heruntergeladene Installationsprogramm aus. Wähle beim Durchgehen des Installers die Punkte **pip** und  **Add Python 3.7 to PATH (Python 3.7 zu PATH hinzufügen)** aus. Das Installationsprogramm installiert Python in deinen Benutzerordner und fügt seine ausführbaren Verzeichnisse deinem Benutzerpfad hinzu.
+3. Da die `PATH` Variable aktualisiert wurde, können wir in der Kommandozeile nun die Befehle `pip` und `python` verwenden. Öffne deine Kommandozeile (im Startmenü zu finden als Eingabeaufforderung) und führe die Befehle `python --version` und `pip --version` aus. Beide müssen bei erfolgreicher Installation eine Versionsnummer ausgeben.
 
-| Symbol    | Meaning                   | Example|
-| ----------|---------------------------|--------|
-|CC         |coordinating conjunction
-|CD         |cardinal digit
-|DT         |determiner
-|EX         |existential                |there (like: "there is" ... think of it like "there exists")
-|FW         |foreign word
-|IN         |preposition/subordinating conjunction
-|JJ         |adjective                  |'big'
-|JJR        |adjective, comparative     |'bigger'
-|JJS        |adjective, superlative     |'biggest'
-|LS         |list marker                |1)
-|MD         |modal                      |could, will
-|NN         |noun, singular             |'desk'
-|NNS        |noun plural                | 'desks'
-|NNP        |proper noun, singular      | 'Harrison'
-|NNPS       |proper noun, plural        |'Americans'
-|PDT        |predeterminer              |'all the kids'
-|POS        |possessive ending          |parent's
-|PRP        |personal pronoun           |I, he, she
-|PRP$       |possessive pronoun         |my, his, hers
-|RB         |adverb                     |very, silently,
-|RBR        |adverb, comparative        | better
-|RBS        |adverb, superlative        | best
-|RP         |particle                   | give up
-|TO         |to                         |go 'to' the store.
-|UH         |interjection               | errrrrrrrm
-|VB         |verb, base form            | take
-|VBD        |verb, past tense           | took
-|VBG        |verb, gerund/present participle    | taking
-|VBN        |verb, past participle              | taken
-|VBP        |verb, sing. present, non-3d        | take
-|VBZ        |verb, 3rd person sing. present     | takes
-|WDT        |wh-determiner              | which
-|WP         |wh-pronoun                 | who, what
-|WP$        |possessive wh-pronoun      | whose
-|WRB        |wh-abverb                  | where, when
+## Die virtuelle Pythonumgebung `venv`
+Es empfiehlt sich eine virtuelle Pythonumgebung zu nutzen, in die nur die benötigten Pakete für das auszuführende Programm geladen werden. 
 
-### phrase tags
-| Symbol    | Meaning               | Example       |
-| ----------|-----------------------|---------------|
-S	        | sentence	            |the man walked
-NP	        |noun phrase	        |a dog
-VP	        |verb phrase	        |saw a park
-PP	        |prepositional phrase	|with a telescope
-Det	        |determiner	            |the
-N	        |noun	                |dog
-V	        |verb	                |walked
-P	        |preposition	        |in
+Zunächst installieren wir mit dem Kommandozeilenbefehl `pip install virtualenv` das Paket für das Erzeugen einer virtuellen Umbegung.
+
+Leg dir zum Programmtest einen 'Projektordner' auf dem Desktop an, lege alle Dateien aus dieser ZIP in diesen Ordner, wechsle in der Kommandozeile in diesen Ordner (`cd c:\Pfad\zu\deinem\Projektordner\auf\dem\Desktop\`) und führe den Befehl `python -m venv .\venv` aus. Er erzeugt dir einen neuen Order namens `venv`, der deine virtuelle Pythonumgebung beinhaltet.
+
+Starte nun mit `.\venv\Scripts\Activate.ps1` dein virtualenv. Es kann sein, dass ein Fehler der etwas von Execution_Policies schreibt auftritt. Um ihn zu beheben muss als Administrator in der Powershell der Befehl `Set-Executionpolicy Unrestricted -Force` ausgeführt werden. Danach das Aktivierungsskript nochmal als normaler Nutzer ausführen. In der Kommandozeile sollte nun `(venv)` vor dem aktuellen Pfad stehen.
+
+## Installation der benötigten Pakete
+Du befidnest dich immernoch im Pfad deines Projektordners. Teste ob du mit dem Befehl `ls` eine datei namens `requirements.txt` findest. In dieser stehen alle Pakete die mittels des `pip` Befehls installiert werden müssen. Mit `pip install -r requirements.txt` installierst du alle auf einmal in deine virtuelle Python Umgebung.
