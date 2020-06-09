@@ -18,7 +18,7 @@ def generate_custom_stop_set():
     """Generates and returns custom german set of stopwords"""
     # get stopwords
     german_stop_words = stopwords.words('german')
-    german_stop_words.extend(('bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib', 'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne'))
+    german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib', 'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -152,23 +152,33 @@ def check_complete(pizza):
     return [sorte, boden]
 
 def say_begruessung(engine):
-    engine.say(rand_greeting())
+    greeting = rand_greeting()
+    engine.say(greeting)
+    print(greeting)
     engine.runAndWait()
 
 def ask_sorte(engine):
-    engine.say(rand_nachfrage())
+    nachfrage = rand_nachfrage()
+    engine.say(nachfrage)
+    print(nachfrage)
     engine.runAndWait()
     
 def ask_boden(engine):
-    engine.say(rand_boden())
+    boden = rand_boden()
+    engine.say(boden)
+    print(boden)
     engine.runAndWait()
     
 def ask_alles(engine):
-    engine.say(rand_alles())
+    alles = rand_alles()
+    engine.say(alles)
+    print(alles)
     engine.runAndWait()
     
 def say_kommt(engine):
-    engine.say(rand_farewell())
+    farewell = rand_farewell()
+    engine.say(farewell)
+    print(farewell)
     engine.runAndWait()
 
 def main():
@@ -218,10 +228,10 @@ def main():
             running = analyse_alles(satz)
             
         say_kommt(engine)
-        sorte = pizza.get_sorte
-        extra = pizza.get_extra
-        out = pizza.get_out
-        boden = pizza.get_boden
+        sorte = pizza.get_sorte()
+        extra = pizza.get_extra()
+        out = pizza.get_out()
+        boden = pizza.get_boden()
         print(sorte, extra, out, boden)
     
 #%%
