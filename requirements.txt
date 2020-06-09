@@ -1,2 +1,5 @@
 numpy
 nltk
+speech_recognition
+gtts
+pyttsx3

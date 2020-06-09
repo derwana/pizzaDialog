@@ -15,5 +15,11 @@ Leg dir zum Programmtest einen 'Projektordner' auf dem Desktop an und lege alle 
 
 Starte nun mit `.\venv\Scripts\Activate.ps1` dein virtualenv. Es kann sein, dass ein Fehler der etwas von ***Execution_Policies*** schreibt auftritt. Um ihn zu beheben muss als Administrator in der Powershell der Befehl `Set-Executionpolicy Unrestricted -Force` ausgeführt werden. Danach das Aktivierungsskript nochmal als normaler Nutzer ausführen. In der Kommandozeile sollte nun `(venv)` vor dem aktuellen Pfad stehen.
 
+## Mikrofon-Nutzung
+Um euer Mikrofon über Python nutzen zu können, benötigt ihr PyAudio. PyAudio kann leider nur bis Python-Version 3.6 über pip installiert werden.
+Ein Workaround um die komplizierte händische Installation ist, die zur Python-Version passende wheel-Datei von https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio zu downloaden und über pip zu installieren.
+Wenn ihr Python 3.7 auf windows benutzt, müsst ihr zum Beispiel PyAudio-0.2.11-cp37-cp37m-win_amd64.whl verwenden.
+Um es mit pip zu installieren, gebt ihr 'pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl' ein. 
+
 ## Installation der benötigten Pakete
 Du befindest dich immernoch im Pfad deines Projektordners. Teste ob du mit dem Befehl `ls` eine Datei namens `requirements.txt` findest. In dieser stehen alle Pakete die mittels des `pip` Befehls installiert werden müssen. Um nicht alle Pakete händisch installieren zu müssen, kannst du mit `pip install -r requirements.txt` alle gelisteten Pakete auf einmal in deine virtuelle Python Umgebung installieren. Sie sind dann nur dort nutzbar und die Dependency-Hölle sollte auf deinen Rechner nicht losbrechen.
