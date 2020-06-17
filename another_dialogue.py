@@ -159,16 +159,17 @@ def analyse_alles(text):
 
 
 def check_complete(pizza):
-    product = 0
-    sorte = 0
-    boden = 0
+    """returns an Array of Boolean Values according to set Variables in given PizzaConfig Object"""
+    product = False
+    sorte = False
+    boden = False
 
     if (pizza.get_sorte() != ''):
-        sorte = 1
+        sorte = True
     if (pizza.get_boden() != 'normal'):
-        boden = 1
+        boden = True
     if (pizza.get_product() != ''):
-        product = 1
+        product = True
 
     return [sorte, boden, product]
 
@@ -237,9 +238,11 @@ def main():
             analyse(satz, pizza)
             complete = check_complete(pizza)
 
+            # debug print
             print(complete)
 
-            while (complete[2] == 0):
+            # check if product is set and if not ask for it
+            while (complete[2] == False):
                 ask_product(engine)
 
                 satz = my_listen(source, engine, r)
@@ -248,7 +251,7 @@ def main():
                 analyse(satz, pizza)
                 complete = check_complete(pizza)
 
-            if (complete[0] == 1 and pizza.get_product() == 'Pizza'):
+            if (complete[0] == True and pizza.get_product() == 'Pizza'):
                 ask_boden(engine)
 
                 satz = my_listen(source, engine, r)
@@ -256,7 +259,8 @@ def main():
 
                 analyse_boden(satz, pizza)
 
-            while (complete[0] != 1):
+            # check if sort is set and if not ask for it
+            while (complete[0] == False):
                 ask_sorte(engine)
 
                 satz = my_listen(source, engine, r)
