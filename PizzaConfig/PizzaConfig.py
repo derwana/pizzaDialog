@@ -9,6 +9,7 @@ class PizzaConfig:
         self.extra = []
         self.out = []
         self.sorte = ''
+        self.product = ''
 
     # set methods
     def set_boden(self, boden):
@@ -31,6 +32,11 @@ class PizzaConfig:
         if sorte in another_constants.SORTEN_LIST:
             self.sorte = sorte
 
+    def set_product(self, product):
+        """set class-member-variable 'sorte' by checking against allowed inputs in constants"""
+        if product in another_constants.PRODUCT_LIST:
+            self.product = product
+
     # get methods
     def get_boden(self):
         """returns class-member-variable 'boden'"""
@@ -47,6 +53,10 @@ class PizzaConfig:
     def get_sorte(self):
         """returns class-member-variable 'sorte'"""
         return self.sorte
+
+    def get_product(self):
+        """returns class-member-variable 'product'"""
+        return self.product
 
     # check methods
     def check_boden(self):
