@@ -111,6 +111,9 @@ def analyse(text, pizza):
 
     for unnoetig in bigram:
         for pos in unnoetig:
+            if pos[1] == "PRODUCT":
+                pizza.set_product(pos[0])
+                # sorte = pos[0]
             if pos[1] == "SORTE":
                 pizza.set_sorte(pos[0])
                 # sorte = pos[0]
@@ -120,7 +123,7 @@ def analyse(text, pizza):
             if pos[1] == "OBELAG":
                 pizza.set_out(pos[0])
                 # obelag.append(pos[0])
-            if pos[1] == "ART":
+            if pos[1] == "BODENART":
                 # boden = pos[0]
                 pizza.set_boden(pos[0])
 
