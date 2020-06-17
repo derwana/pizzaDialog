@@ -4,6 +4,7 @@ from nltk import CFG
 SORTEN_LIST = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
 BELAG_LIST = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat', 'Oliven']
 BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
+PRODUCT_LIST = ['Pizza', 'Pizzabrötchen', 'Calzone']
 
 # P -> SORTE für Nachfrage "welche Sorte?"
 GRAMMAR = CFG.fromstring("""
