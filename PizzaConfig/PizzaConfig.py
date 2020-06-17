@@ -1,4 +1,4 @@
-import constants
+import another_constants
 
 
 class PizzaConfig:
@@ -13,22 +13,22 @@ class PizzaConfig:
     # set methods
     def set_boden(self, boden):
         """set class-member-variable 'boden' by checking against allowed inputs in constants"""
-        if boden in constants.BODEN_LIST:
+        if boden in another_constants.BODEN_LIST:
             self.boden = boden
 
     def set_extra(self, belag):
         """set class-member-variable 'extra' by checking against allowed inputs in constants"""
-        if belag in constants.BELAG_LIST:
+        if belag in another_constants.BELAG_LIST:
             self.extra.append(belag)
 
     def set_out(self, belag):
         """set class-member-variable 'out' by checking against allowed inputs in constants"""
-        if belag in constants.BELAG_LIST:
+        if belag in another_constants.BELAG_LIST:
             self.out.append(belag)
 
     def set_sorte(self, sorte):
         """set class-member-variable 'sorte' by checking against allowed inputs in constants"""
-        if sorte in constants.SORTEN_LIST:
+        if sorte in another_constants.SORTEN_LIST:
             self.sorte = sorte
 
     # get methods
