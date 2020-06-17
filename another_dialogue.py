@@ -239,7 +239,7 @@ def main():
 
             print(complete)
 
-            while (complete[2] != ''):
+            while (complete[2] == 0):
                 ask_product(engine)
 
                 satz = my_listen(source, engine, r)
@@ -248,7 +248,7 @@ def main():
                 analyse(satz, pizza)
                 complete = check_complete(pizza)
 
-            if (complete[0] == 1):
+            if (complete[0] == 1 and pizza.get_product() == 'Pizza'):
                 ask_boden(engine)
 
                 satz = my_listen(source, engine, r)
