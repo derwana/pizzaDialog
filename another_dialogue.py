@@ -41,7 +41,13 @@ def rand_farewell():
     return random.choice(farewells)
 
 
-def rand_nachfrage():
+def rand_product():
+    """Generates a random question from a given array and returns that question as string."""
+    nachfrage = ["Was möchten Sie denn?", "Was wollen Sie bestellen? Wir haben Pizza, Pizzabrötchen und Calzone."]
+    return random.choice(nachfrage)
+
+
+def rand_sorte():
     """Generates a random question from a given array and returns that question as string."""
     nachfrage = ["Was fuer eine Pizza wollen Sie denn?", "Welche Pizza haetten Sie denn gerne?",
                  "Was fuer eine?"]
@@ -150,6 +156,7 @@ def analyse_alles(text):
 
 
 def check_complete(pizza):
+    product = 0
     sorte = 0
     boden = 0
 
@@ -157,8 +164,10 @@ def check_complete(pizza):
         sorte = 1
     if (pizza.get_boden() != 'normal'):
         boden = 1
+    if (pizza.get_product() != ''):
+        product = 1
 
-    return [sorte, boden]
+    return [sorte, boden, product]
 
 
 def say_begruessung(engine):
@@ -168,8 +177,15 @@ def say_begruessung(engine):
     engine.runAndWait()
 
 
+def ask_product(engine):
+    nachfrage = rand_product()
+    engine.say(nachfrage)
+    print(nachfrage)
+    engine.runAndWait()
+
+
 def ask_sorte(engine):
-    nachfrage = rand_nachfrage()
+    nachfrage = rand_sorte()
     engine.say(nachfrage)
     print(nachfrage)
     engine.runAndWait()
@@ -220,6 +236,15 @@ def main():
 
             print(complete)
 
+            while (complete[2] != ''):
+                ask_product(engine)
+
+                satz = my_listen(source, engine, r)
+                satz = string_works(satz, german_stop_set)
+
+                analyse(satz, pizza)
+                complete = check_complete(pizza)
+
             if (complete[0] == 1):
                 ask_boden(engine)
 
@@ -237,6 +262,7 @@ def main():
                 analyse(satz, pizza)
                 complete = check_complete(pizza)
 
+            # asking but makes no difference
             ask_alles(engine)
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)
