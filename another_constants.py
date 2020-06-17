@@ -5,6 +5,7 @@ SORTEN_LIST = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
 BELAG_LIST = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat', 'Oliven']
 BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
 
+# P -> SORTE für Nachfrage "welche Sorte?"
 GRAMMAR = CFG.fromstring("""
 S -> P M O B
 S -> P O M B
