@@ -88,8 +88,9 @@ JA -> 'ja'|'jo'|'jep'
 ALLESPARSER = nltk.ChartParser(ALLESGRAMMAR)
 
 SORTEN = [
+    # vegetarisch, Sorte, Zutaten
     [1, 'Salami', 'Tomatensauce', 'Salami', 'Kaese'],
     [0, 'Margherita', 'Tomatensauce', 'Kaese'],
-    [0, 'Spinat', 'Tomatensauce', 'Spinat' ,'Kaese'],
+    [0, 'Spinat', 'Tomatensauce', 'Spinat', 'Kaese'],
     [1, 'Hawaii', 'Tomatensauce', 'Schinken', 'Ananas', 'Hawaii', 'Kaese']
 ]

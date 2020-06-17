@@ -8,7 +8,6 @@ from PizzaConfig import PizzaConfig
 import speech_recognition as sr
 import pyttsx3
 from another_constants import PARSER, BODENPARSER, ALLESPARSER, MENUEPARSER, SORTEN
-import string
 
 
 # %%
@@ -43,7 +42,7 @@ def rand_farewell():
 
 def rand_product():
     """Generates a random question from a given array and returns that question as string."""
-    nachfrage = ["Was möchten Sie denn?", "Was wollen Sie bestellen? Wir haben Pizza, Pizzabrötchen und Calzone."]
+    nachfrage = ["Was moechten Sie denn?", "Was wollen Sie bestellen? Wir haben Pizza, Pizzabroetchen und Calzone."]
     return random.choice(nachfrage)
 
 
