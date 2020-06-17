@@ -1,14 +1,14 @@
 # %%
 import random
 import nltk
-
 nltk.download('stopwords')
 nltk.download('punkt')
 from nltk.corpus import stopwords
 from PizzaConfig import PizzaConfig
 import speech_recognition as sr
 import pyttsx3
-from another_constants import PARSER, BODENPARSER, ALLESPARSER
+from another_constants import PARSER, BODENPARSER, ALLESPARSER, MENUEPARSER, SORTEN
+import string
 
 
 # %%
@@ -102,7 +102,7 @@ def string_works(string_input, stop_set):
     return tokenized_output
 
 
-def analyse(text, pizza):
+def analyse(text, pizza, engine, source, r, german_stop_set):
     trees = PARSER.parse(text)
     bigram = []
     for tree in trees:
@@ -126,6 +126,8 @@ def analyse(text, pizza):
             if pos[1] == "BODENART":
                 # boden = pos[0]
                 pizza.set_boden(pos[0])
+            if pos[1] == "MENUE":
+                menue_dialog(engine, source, r, german_stop_set)
 
 
 def analyse_boden(text, pizza):
@@ -158,6 +160,39 @@ def analyse_alles(text):
     return alles
 
 
+def analyse_menue(text):
+    trees = MENUEPARSER.parse(text)
+    bigram = []
+    for tree in trees:
+        # print(tree)
+        bigram.append(tree.pos())
+
+    menue = []
+
+    for unnoetig in bigram:
+        for pos in unnoetig:
+            if pos[1] == "VEG":
+                # show veggie menue
+                for sorte in SORTEN:
+                    if sorte[0] == 0:
+                        print(sorte[1])
+                        menue.append(sorte[1])
+            if pos[1] == "MB":
+                # show menue with pos[0]
+                for sorte in SORTEN:
+                    if pos[0] in sorte:
+                        print(sorte[1])
+                        menue.append(sorte[1])
+            if pos[1] == "OB":
+                # show menue without pos[0]
+                for sorte in SORTEN:
+                    if pos[0] not in sorte:
+                        print(sorte[1])
+                        menue.append(sorte[1])
+
+        return menue
+
+
 def check_complete(pizza):
     """returns an Array of Boolean Values according to set Variables in given PizzaConfig Object"""
     product = False
@@ -172,6 +207,18 @@ def check_complete(pizza):
         product = True
 
     return [sorte, boden, product]
+
+
+def menue_dialog(engine, source, r, german_stop_set):
+    engine.say("Haben Sie besondere Vorlieben?")
+    engine.runAndWait()
+    satz = my_listen(source, engine, r)
+    satz = string_works(satz, german_stop_set)
+    menue = analyse_menue(satz)
+    separator = ", "
+    menue = separator.join(menue)
+    engine.say("Da haben wir" + menue + ". Was davon hätten Sie denn gerne?")
+    engine.runAndWait()
 
 
 def say_begruessung(engine):
@@ -235,7 +282,7 @@ def main():
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)
 
-            analyse(satz, pizza)
+            analyse(satz, pizza, engine, source, r, german_stop_set)
             complete = check_complete(pizza)
 
             # debug print
@@ -266,7 +313,7 @@ def main():
                 satz = my_listen(source, engine, r)
                 satz = string_works(satz, german_stop_set)
 
-                analyse(satz, pizza)
+                analyse(satz, pizza, engine, source, r, german_stop_set)
                 complete = check_complete(pizza)
 
             # asking but makes no difference
