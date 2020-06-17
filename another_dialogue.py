@@ -41,7 +41,13 @@ def rand_farewell():
     return random.choice(farewells)
 
 
-def rand_nachfrage():
+def rand_product():
+    """Generates a random question from a given array and returns that question as string."""
+    nachfrage = ["Was möchten Sie denn?", "Was wollen Sie bestellen? Wir haben Pizza, Pizzabrötchen und Calzone."]
+    return random.choice(nachfrage)
+
+
+def rand_sorte():
     """Generates a random question from a given array and returns that question as string."""
     nachfrage = ["Was fuer eine Pizza wollen Sie denn?", "Welche Pizza haetten Sie denn gerne?",
                  "Was fuer eine?"]
@@ -105,6 +111,9 @@ def analyse(text, pizza):
 
     for unnoetig in bigram:
         for pos in unnoetig:
+            if pos[1] == "PRODUCT":
+                pizza.set_product(pos[0])
+                # sorte = pos[0]
             if pos[1] == "SORTE":
                 pizza.set_sorte(pos[0])
                 # sorte = pos[0]
@@ -114,7 +123,7 @@ def analyse(text, pizza):
             if pos[1] == "OBELAG":
                 pizza.set_out(pos[0])
                 # obelag.append(pos[0])
-            if pos[1] == "ART":
+            if pos[1] == "BODENART":
                 # boden = pos[0]
                 pizza.set_boden(pos[0])
 
@@ -150,15 +159,19 @@ def analyse_alles(text):
 
 
 def check_complete(pizza):
-    sorte = 0
-    boden = 0
+    """returns an Array of Boolean Values according to set Variables in given PizzaConfig Object"""
+    product = False
+    sorte = False
+    boden = False
 
     if (pizza.get_sorte() != ''):
-        sorte = 1
+        sorte = True
     if (pizza.get_boden() != 'normal'):
-        boden = 1
+        boden = True
+    if (pizza.get_product() != ''):
+        product = True
 
-    return [sorte, boden]
+    return [sorte, boden, product]
 
 
 def say_begruessung(engine):
@@ -168,8 +181,15 @@ def say_begruessung(engine):
     engine.runAndWait()
 
 
+def ask_product(engine):
+    nachfrage = rand_product()
+    engine.say(nachfrage)
+    print(nachfrage)
+    engine.runAndWait()
+
+
 def ask_sorte(engine):
-    nachfrage = rand_nachfrage()
+    nachfrage = rand_sorte()
     engine.say(nachfrage)
     print(nachfrage)
     engine.runAndWait()
@@ -218,9 +238,20 @@ def main():
             analyse(satz, pizza)
             complete = check_complete(pizza)
 
+            # debug print
             print(complete)
 
-            if (complete[0] == 1):
+            # check if product is set and if not ask for it
+            while (complete[2] == False):
+                ask_product(engine)
+
+                satz = my_listen(source, engine, r)
+                satz = string_works(satz, german_stop_set)
+
+                analyse(satz, pizza)
+                complete = check_complete(pizza)
+
+            if (complete[0] == True and pizza.get_product() == 'Pizza'):
                 ask_boden(engine)
 
                 satz = my_listen(source, engine, r)
@@ -228,7 +259,8 @@ def main():
 
                 analyse_boden(satz, pizza)
 
-            while (complete[0] != 1):
+            # check if sort is set and if not ask for it
+            while (complete[0] == False):
                 ask_sorte(engine)
 
                 satz = my_listen(source, engine, r)
@@ -237,6 +269,7 @@ def main():
                 analyse(satz, pizza)
                 complete = check_complete(pizza)
 
+            # asking but makes no difference
             ask_alles(engine)
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)

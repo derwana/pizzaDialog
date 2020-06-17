@@ -4,6 +4,7 @@ from nltk import CFG
 SORTEN_LIST = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
 BELAG_LIST = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat', 'Oliven']
 BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
+PRODUCT_LIST = ['Pizza', 'Pizzabrötchen', 'Calzone']
 
 # P -> SORTE für Nachfrage "welche Sorte?"
 GRAMMAR = CFG.fromstring("""
@@ -21,11 +22,11 @@ S -> P O
 S -> P B
 S -> P M
 S -> P
-S -> N
-N -> 'Pizza'
+S -> PRODUCT
+PRODUCT -> 'Pizza'|'Pizzabrötchen'|'Calzone'
 P -> SORTE
-P -> SORTE 'Pizza'
-P -> 'Pizza' SORTE
+P -> SORTE PRODUCT
+P -> PRODUCT SORTE
 SORTE -> 'Salami'|'Hawaii'|'Margaritha'|'Spinat'|'Margarita'|'Margherita'
 M -> 'mit' MBELAG
 M -> 'zusätzlich' MBELAG
@@ -37,8 +38,8 @@ MBELAG -> MBELAG MBELAG
 MBELAG -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
 OBELAG -> OBELAG OBELAG
 OBELAG -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
-B -> 'mit' ART
-ART -> 'dünnem' BODEN|'dickem' BODEN
+B -> 'mit' BODENART
+BODENART -> 'dünnem' BODEN|'dickem' BODEN
 BODEN -> 'Boden'
 """)
 PARSER = nltk.ChartParser(GRAMMAR)
