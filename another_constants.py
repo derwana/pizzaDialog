@@ -1,7 +1,7 @@
 import nltk
 from nltk import CFG
 
-SORTEN_LIST = ['salami', 'hawaii', 'spinat', 'margaritha', 'margarita', 'margherita']
+SORTEN_LIST = ['salami', 'hawaii', 'spinat', 'margaritha', 'margarita', 'margherita', 'funghi']
 BELAG_LIST = ['salami', 'tomate', 'ananas', 'schinken', 'käse', 'spinat', 'oliven', 'peperoni', 'peperonis', 'pepperoni']
 BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
 PRODUCT_LIST = ['pizza', 'pizzabrötchen', 'calzone']
@@ -25,7 +25,7 @@ S -> P
 S -> PRODUCT
 PRODUCT -> 'pizza'|'pizzabrötchen'|'calzone'
 P -> SORTE
-SORTE -> 'salami'|'hawaii'|'margaritha'|'spinat'|'margarita'|'margherita'|'spinatpizza'
+SORTE -> 'salami'|'hawaii'|'margaritha'|'spinat'|'margarita'|'margherita'|'spinatpizza'|'funghi'
 P -> SORTE PRODUCT
 P -> PRODUCT SORTE
 M -> 'mit' MBELAG
@@ -35,9 +35,9 @@ M -> 'mit' M
 O -> 'ohne' OBELAG
 O -> 'kein' OBELAG
 MBELAG -> MBELAG MBELAG
-MBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
+MBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
 OBELAG -> OBELAG OBELAG
-OBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
+OBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
 B -> 'mit' BODENART
 BODENART -> 'dünnem' BODEN|'dickem' BODEN
 BODEN -> 'boden'
@@ -62,9 +62,9 @@ MENUEGRAMMAR = CFG.fromstring("""
     O -> 'kein' OB
     O -> 'kein' VEG
     MB -> MB MB
-    MB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
+    MB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
     OB -> OB OB
-    OB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
+    OB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
 """)
 MENUEPARSER = nltk.ChartParser(MENUEGRAMMAR)
 
@@ -84,8 +84,22 @@ BODENPARSER = nltk.ChartParser(BODENGRAMMAR)
 ALLESGRAMMAR = CFG.fromstring("""
 S -> JA
 S -> NEIN
+S -> M
+S -> O
 NEIN -> 'nein'|'nö'|'nee'
 JA -> 'ja'|'jo'|'jep'
+M -> 'mit' MB
+M -> 'zusätzlich' MB
+M -> 'extra' MB
+M -> 'mit' M
+O -> 'ohne' OB
+O -> 'ohne' VEG
+O -> 'kein' OB
+O -> 'kein' VEG
+MB -> MB MB
+MB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
+OB -> OB OB
+OB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
 """)
 ALLESPARSER = nltk.ChartParser(ALLESGRAMMAR)
 
@@ -94,5 +108,6 @@ SORTEN = [
     [1, 'Salami', 'tomatensauce', 'salami', 'käse'],
     [0, 'Margherita', 'tomatensauce', 'käse'],
     [0, 'Spinat', 'tomatensauce', 'spinat', 'käse'],
-    [1, 'Hawaii', 'tomatensauce', 'schinken', 'ananas', 'käse']
+    [1, 'Hawaii', 'tomatensauce', 'schinken', 'ananas', 'käse'],
+    [0, 'Funghi', 'tomatensauce, pilze, käse']
 ]

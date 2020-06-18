@@ -16,7 +16,8 @@ def generate_custom_stop_set():
     # get stopwords
     german_stop_words = stopwords.words('german')
     german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib',
-                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen', 'nehmen'))
+                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen', 'nehmen',
+                              'sehen'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -127,7 +128,7 @@ def analyse_boden(text, pizza):
                 pizza.set_boden = pos[0]
 
 
-def analyse_alles(text):
+def analyse_alles(text, pizza):
     """Parse text and return 0 if customer is satisfied, 1 if customer wants to add anything to order."""
     trees = ALLESPARSER.parse(text)
     bigram = []
@@ -141,6 +142,13 @@ def analyse_alles(text):
                 alles = 0
             if pos[1] == "NEIN":
                 alles = 0
+            if pos[1] == "MB":
+                pizza.set_extra(pos[0])
+                alles = 1
+            if pos[1] == "OB":
+                pizza.set_out(pos[0])
+                alles = 1
+            
     return alles
 
 
@@ -279,9 +287,11 @@ def main():
             # initialise pizza object
             pizza = PizzaConfig.PizzaConfig()
 
+            # listen for initial order
             satz = my_listen(source, engine, r)
             satz = string_works(satz, german_stop_set)
 
+            # analyse order
             analyse(satz, pizza, engine, source, r, german_stop_set)
             complete = check_complete(pizza)
 
@@ -298,6 +308,7 @@ def main():
                 analyse(satz, pizza, engine, source, r, german_stop_set)
                 complete = check_complete(pizza)
 
+            # if type and product were given, ask for base 
             if (complete[0] == True and pizza.get_product() == 'Pizza'):
                 ask_boden(engine)
 
@@ -316,11 +327,13 @@ def main():
                 analyse(satz, pizza, engine, source, r, german_stop_set)
                 complete = check_complete(pizza)
 
-            # asking but makes no difference
-            ask_alles(engine)
-            satz = my_listen(source, engine, r)
-            satz = string_works(satz, german_stop_set)
-            running = analyse_alles(satz)
+            # does the customer want to add anything? yes -> change and reask, no -> go on
+            running = 1
+            while(running):
+                ask_alles(engine)
+                satz = my_listen(source, engine, r)
+                satz = string_works(satz, german_stop_set)
+                running = analyse_alles(satz, pizza)
 
         say_kommt(engine)
         # debug print
