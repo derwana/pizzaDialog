@@ -16,7 +16,7 @@ def generate_custom_stop_set():
     # get stopwords
     german_stop_words = stopwords.words('german')
     german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib',
-                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen'))
+                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen', 'nehmen'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -65,39 +65,27 @@ def rand_boden():
     boden = ["Wuenschen Sie einen duennen, dicken oder normalen Boden?", "Okay, duenner oder dicker Boden?"]
     return random.choice(boden)
 
-#rekursion?
+
 def my_listen(source, engine, r):
     """STT: Listens to microphone and returns recognized string."""
-    notunderstood = 1
-    while (notunderstood):
-        r.adjust_for_ambient_noise(source)
-        audio = r.listen(source)
-        test = ""
-        try:
-            test = r.recognize_google(audio, language="de-de")
-        except:
-            engine.say("Entschuldigung, das habe ich nicht verstanden. Bitte wiederholen Sie, was Sie gesagt haben.")
-            engine.runAndWait()
-        notunderstood = 0
-        print(test)
-        return test
-
-
-def string_tokenize(string_input):
-    """Tokenizes the string_input argument. Returns a list of tokens."""
-    return nltk.word_tokenize(string_input)
-
-
-def cut_stopwords(string_input, stop_set):
-    """Cuts given stopwords in stop_set argument from string_input argument. Returns a list words."""
-    return [word for word in string_input if word not in stop_set]
+    r.adjust_for_ambient_noise(source)
+    audio = r.listen(source)
+    recognized = ""
+    try:
+        recognized = r.recognize_google(audio, language="de-de")
+    except:
+        engine.say("Entschuldigung, das habe ich nicht verstanden. Bitte wiederholen Sie, was Sie gesagt haben.")
+        engine.runAndWait()
+        recognized = my_listen(source, engine, r)
+    print(recognized)
+    return recognized
 
 
 def string_works(string_input, stop_set):
-    """Wrapper for string_tokenize(string_input) and cut_stopwords(string_input, stop_set). Returns a list."""
+    """Convert string to lower case, tokenize words, remove words from stop-set, return list of words"""
     string_input = string_input.lower()
-    string_tokenized = string_tokenize(string_input)
-    tokenized_output = cut_stopwords(string_tokenized, stop_set)
+    string_tokenized = nltk.word_tokenize(string_input)
+    tokenized_output = [word for word in string_tokenized if word not in stop_set]
     return tokenized_output
 
 
