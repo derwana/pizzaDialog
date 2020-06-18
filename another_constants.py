@@ -1,10 +1,10 @@
 import nltk
 from nltk import CFG
 
-SORTEN_LIST = ['Salami', 'Hawaii', 'Spinat', 'Margaritha']
-BELAG_LIST = ['Salami', 'Tomate', 'Ananas', 'Schinken', 'Käse', 'Spinat', 'Oliven']
+SORTEN_LIST = ['salami', 'hawaii', 'spinat', 'margaritha', 'margarita', 'margherita']
+BELAG_LIST = ['salami', 'tomate', 'ananas', 'schinken', 'käse', 'spinat', 'oliven', 'peperoni', 'peperonis', 'pepperoni']
 BODEN_LIST = ['dick', 'dickem', 'dicken', 'dickes', 'normal', 'normalen', 'normalem', 'normales', 'dünn', 'dünnem', 'dünnen', 'dünnes']
-PRODUCT_LIST = ['Pizza', 'Pizzabrötchen', 'Calzone']
+PRODUCT_LIST = ['pizza', 'pizzabrötchen', 'calzone']
 
 GRAMMAR = CFG.fromstring("""
 S -> MENUE
@@ -23,9 +23,9 @@ S -> P B
 S -> P M
 S -> P
 S -> PRODUCT
-PRODUCT -> 'Pizza'|'Pizzabrötchen'|'Calzone'
+PRODUCT -> 'pizza'|'pizzabrötchen'|'calzone'
 P -> SORTE
-SORTE -> 'Salami'|'Hawaii'|'Margaritha'|'Spinat'|'Margarita'|'Margherita'|'Spinatpizza'
+SORTE -> 'salami'|'hawaii'|'margaritha'|'spinat'|'margarita'|'margherita'|'spinatpizza'
 P -> SORTE PRODUCT
 P -> PRODUCT SORTE
 M -> 'mit' MBELAG
@@ -35,13 +35,13 @@ M -> 'mit' M
 O -> 'ohne' OBELAG
 O -> 'kein' OBELAG
 MBELAG -> MBELAG MBELAG
-MBELAG -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
+MBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
 OBELAG -> OBELAG OBELAG
-OBELAG -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
+OBELAG -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
 B -> 'mit' BODENART
 BODENART -> 'dünnem' BODEN|'dickem' BODEN
-BODEN -> 'Boden'
-MENUE -> 'was'|'welche'|'menue'|'Menü'
+BODEN -> 'boden'
+MENUE -> 'was'|'welche'|'menue'|'menü'
 """)
 PARSER = nltk.ChartParser(GRAMMAR)
 
@@ -51,18 +51,20 @@ MENUEGRAMMAR = CFG.fromstring("""
     S -> M
     S -> MB
     S -> O
-    VEG -> 'vegetarisch'
-    VEG -> 'ohne' 'Fleisch'
+    VEG -> 'vegetarisch'|'vegetarisches'
+    VEG -> 'fleisch'
     M -> 'mit' MB
     M -> 'zusätzlich' MB
     M -> 'extra' MB
     M -> 'mit' M
     O -> 'ohne' OB
+    O -> 'ohne' VEG
     O -> 'kein' OB
+    O -> 'kein' VEG
     MB -> MB MB
-    MB -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
+    MB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
     OB -> OB OB
-    OB -> 'Salami'|'Schinken'|'Ananas'|'Tomate'|'Peperoni'|'Käse'|'Spinat'|'Oliven'
+    OB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'
 """)
 MENUEPARSER = nltk.ChartParser(MENUEGRAMMAR)
 
@@ -73,8 +75,8 @@ S -> ART
 B -> 'mit' ART
 ART -> 'dünnem' BODEN|'dickem' BODEN
 ART -> 'dünnen' BODEN|'dicken' BODEN
-ART -> 'dick'|'dünn'|'dickem'|'dicken'|'dickes'|'normal'|'normalen'|'normalem'|'normales'|'dünnem'|'dünnen'|'dünnes'
-BODEN -> 'Boden'
+ART -> 'dick'|'dünn'|'dickem'|'dicken'|'dickes'|'normal'|'normalen'|'normalem'|'normales'|'dünnem'|'dünnen'|'dünnes'|'dicker'|'dünner'|'normaler'
+BODEN -> 'boden'
 """)
 BODENPARSER = nltk.ChartParser(BODENGRAMMAR)
 
@@ -89,8 +91,8 @@ ALLESPARSER = nltk.ChartParser(ALLESGRAMMAR)
 
 SORTEN = [
     # vegetarisch, Sorte, Zutaten
-    [1, 'Salami', 'Tomatensauce', 'Salami', 'Kaese'],
-    [0, 'Margherita', 'Tomatensauce', 'Kaese'],
-    [0, 'Spinat', 'Tomatensauce', 'Spinat', 'Kaese'],
-    [1, 'Hawaii', 'Tomatensauce', 'Schinken', 'Ananas', 'Hawaii', 'Kaese']
+    [1, 'Salami', 'tomatensauce', 'salami', 'käse'],
+    [0, 'Margherita', 'tomatensauce', 'käse'],
+    [0, 'Spinat', 'tomatensauce', 'spinat', 'käse'],
+    [1, 'Hawaii', 'tomatensauce', 'schinken', 'ananas', 'käse']
 ]
