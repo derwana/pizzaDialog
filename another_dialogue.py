@@ -65,7 +65,7 @@ def rand_boden():
     boden = ["Wuenschen Sie einen duennen, dicken oder normalen Boden?", "Okay, duenner oder dicker Boden?"]
     return random.choice(boden)
 
-
+#rekursion?
 def my_listen(source, engine, r):
     """STT: Listens to microphone and returns recognized string."""
     notunderstood = 1
@@ -114,18 +114,13 @@ def analyse(text, pizza, engine, source, r, german_stop_set):
         for pos in unnoetig:
             if pos[1] == "PRODUCT":
                 pizza.set_product(pos[0])
-                # sorte = pos[0]
             if pos[1] == "SORTE":
                 pizza.set_sorte(pos[0])
-                # sorte = pos[0]
             if pos[1] == "MBELAG":
                 pizza.set_extra(pos[0])
-                # mbelag.append(pos[0])
             if pos[1] == "OBELAG":
                 pizza.set_out(pos[0])
-                # obelag.append(pos[0])
             if pos[1] == "BODENART":
-                # boden = pos[0]
                 pizza.set_boden(pos[0])
             if pos[1] == "MENUE":
                 menue_dialog(engine, source, r, german_stop_set)
@@ -136,7 +131,6 @@ def analyse_boden(text, pizza):
     trees = BODENPARSER.parse(text)
     bigram = []
     for tree in trees:
-        # print(tree)
         bigram.append(tree.pos())
 
     for unnoetig in bigram:
@@ -151,7 +145,6 @@ def analyse_alles(text):
     bigram = []
     alles = 0
     for tree in trees:
-        # print(tree)
         bigram.append(tree.pos())
 
     for unnoetig in bigram:
@@ -168,7 +161,6 @@ def analyse_menue(text):
     trees = MENUEPARSER.parse(text)
     bigram = []
     for tree in trees:
-        # print(tree)
         bigram.append(tree.pos())
 
     menue = []
@@ -182,13 +174,13 @@ def analyse_menue(text):
                         print(sorte[1])
                         menue.append(sorte[1])
             if pos[1] == "MB":
-                # show menue with pos[0]
+                # show menue with topping
                 for sorte in SORTEN:
                     if pos[0] in sorte:
                         print(sorte[1])
                         menue.append(sorte[1])
             if pos[1] == "OB":
-                # show menue without pos[0]
+                # show menue without topping
                 for sorte in SORTEN:
                     if pos[0] not in sorte:
                         print(sorte[1])
