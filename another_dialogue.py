@@ -102,6 +102,8 @@ def string_works(string_input, stop_set):
 
 
 def analyse(text, pizza, engine, source, r, german_stop_set):
+    """Parse text and add features to pizza-object, if relevant information is given.
+    Open menu-dialogue if asked for."""
     trees = PARSER.parse(text)
     bigram = []
     for tree in trees:
@@ -130,6 +132,7 @@ def analyse(text, pizza, engine, source, r, german_stop_set):
 
 
 def analyse_boden(text, pizza):
+    """Parse text and add Boden-feature to pizza-object, if relevant information is given."""
     trees = BODENPARSER.parse(text)
     bigram = []
     for tree in trees:
@@ -143,6 +146,7 @@ def analyse_boden(text, pizza):
 
 
 def analyse_alles(text):
+    """Parse text and return 0 if customer is satisfied, 1 if customer wants to add anything to order."""
     trees = ALLESPARSER.parse(text)
     bigram = []
     alles = 0
@@ -160,6 +164,7 @@ def analyse_alles(text):
 
 
 def analyse_menue(text):
+    """Parse text and return relevant menu-options"""
     trees = MENUEPARSER.parse(text)
     bigram = []
     for tree in trees:
@@ -209,6 +214,7 @@ def check_complete(pizza):
 
 
 def menue_dialog(engine, source, r, german_stop_set):
+    """Ask for preferences for menu, call analyse_menue(), give relevant options from return value"""
     engine.say("Haben Sie besondere Vorlieben?")
     engine.runAndWait()
     satz = my_listen(source, engine, r)
@@ -221,6 +227,7 @@ def menue_dialog(engine, source, r, german_stop_set):
 
 
 def say_begruessung(engine):
+    """Say greeting from randomised greetings"""
     greeting = rand_greeting()
     engine.say(greeting)
     print(greeting)
@@ -228,6 +235,7 @@ def say_begruessung(engine):
 
 
 def ask_product(engine):
+    """Ask for product - randomised question"""
     nachfrage = rand_product()
     engine.say(nachfrage)
     print(nachfrage)
@@ -235,6 +243,7 @@ def ask_product(engine):
 
 
 def ask_sorte(engine):
+    """Ask for type - randomised question"""
     nachfrage = rand_sorte()
     engine.say(nachfrage)
     print(nachfrage)
@@ -242,6 +251,7 @@ def ask_sorte(engine):
 
 
 def ask_boden(engine):
+    """Ask for base - randomised question"""
     boden = rand_boden()
     engine.say(boden)
     print(boden)
@@ -249,6 +259,7 @@ def ask_boden(engine):
 
 
 def ask_alles(engine):
+    """Ask if customer is done - randomised question"""
     alles = rand_alles()
     engine.say(alles)
     print(alles)
@@ -256,6 +267,7 @@ def ask_alles(engine):
 
 
 def say_kommt(engine):
+    """Say farewell from randomised farewells"""
     farewell = rand_farewell()
     engine.say(farewell)
     print(farewell)
@@ -263,9 +275,11 @@ def say_kommt(engine):
 
 
 def main():
+    # initialise text-to-speech-engine
     engine = pyttsx3.init()
     engine.runAndWait()
 
+    # initialise speech-recognition
     r = sr.Recognizer()
 
     german_stop_set = generate_custom_stop_set()
@@ -276,6 +290,7 @@ def main():
 
     while (running):
         with sr.Microphone() as source:
+            # initialise pizza object
             pizza = PizzaConfig.PizzaConfig()
 
             satz = my_listen(source, engine, r)
@@ -294,7 +309,7 @@ def main():
                 satz = my_listen(source, engine, r)
                 satz = string_works(satz, german_stop_set)
 
-                analyse(satz, pizza)
+                analyse(satz, pizza, engine, source, r, german_stop_set)
                 complete = check_complete(pizza)
 
             if (complete[0] == True and pizza.get_product() == 'Pizza'):
@@ -305,7 +320,7 @@ def main():
 
                 analyse_boden(satz, pizza)
 
-            # check if sort is set and if not ask for it
+            # check if type is set and if not ask for it
             while (complete[0] == False):
                 ask_sorte(engine)
 
