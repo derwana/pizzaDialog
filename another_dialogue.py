@@ -16,7 +16,7 @@ def generate_custom_stop_set():
     # get stopwords
     german_stop_words = stopwords.words('german')
     german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib',
-                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne'))
+                              'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -95,7 +95,7 @@ def cut_stopwords(string_input, stop_set):
 
 def string_works(string_input, stop_set):
     """Wrapper for string_tokenize(string_input) and cut_stopwords(string_input, stop_set). Returns a list."""
-    string_input.lower()
+    string_input = string_input.lower()
     string_tokenized = string_tokenize(string_input)
     tokenized_output = cut_stopwords(string_tokenized, stop_set)
     return tokenized_output
@@ -221,8 +221,14 @@ def menue_dialog(engine, source, r, german_stop_set):
     satz = string_works(satz, german_stop_set)
     menue = analyse_menue(satz)
     separator = ", "
-    menue = separator.join(menue)
-    engine.say("Da haben wir" + menue + ". Was davon hätten Sie denn gerne?")
+    try:
+        menue = separator.join(menue)
+    except:
+        engine.say("So etwas haben wir leider nicht. Versuchen Sie es mit etwas anderem.")
+        engine.runAndWait()
+        menue_dialog(engine, source, r, german_stop_set)
+    
+    engine.say("Da haben wir" + menue + ".")
     engine.runAndWait()
 
 
@@ -349,3 +355,4 @@ def main():
 main()
 
 # %%
+
