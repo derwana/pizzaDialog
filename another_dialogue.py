@@ -49,7 +49,7 @@ def rand_product():
 
 def rand_sorte():
     """Generates a random question from a given array and returns that question as string."""
-    nachfrage = ["Was fuer eine Pizza wollen Sie denn?", "Welche Pizza haetten Sie denn gerne?",
+    nachfrage = ["Was fuer eine Sorte wollen Sie denn?", "Welche Sorte haetten Sie denn gerne?",
                  "Was fuer eine?"]
     return random.choice(nachfrage)
 
