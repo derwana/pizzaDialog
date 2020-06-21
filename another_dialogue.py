@@ -218,6 +218,7 @@ def menue_dialog(engine, source, r, german_stop_set):
     
     engine.say("Da haben wir" + menue + ".")
     engine.runAndWait()
+    print("Da haben wir" + menue + ".")
 
 
 def say_begruessung(engine):
