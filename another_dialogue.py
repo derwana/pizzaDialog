@@ -17,7 +17,7 @@ def generate_custom_stop_set():
     german_stop_words = stopwords.words('german')
     german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib',
                               'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen', 'nehmen',
-                              'sehen'))
+                              'sehen', 'nehme', 'tag'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
@@ -167,21 +167,20 @@ def analyse_menue(text):
                 # show veggie menue
                 for sorte in SORTEN:
                     if sorte[0] == 0:
-                        print(sorte[1])
                         menue.append(sorte[1])
             if pos[1] == "MB":
                 # show menue with topping
                 for sorte in SORTEN:
                     if pos[0] in sorte:
-                        print(sorte[1])
                         menue.append(sorte[1])
             if pos[1] == "OB":
                 # show menue without topping
                 for sorte in SORTEN:
                     if pos[0] not in sorte:
-                        print(sorte[1])
                         menue.append(sorte[1])
-
+            if pos[1] == "NEIN":
+                for sorte in SORTEN:
+                    menue.append(sorte)
         return menue
 
 
@@ -205,6 +204,7 @@ def menue_dialog(engine, source, r, german_stop_set):
     """Ask for preferences for menu, call analyse_menue(), give relevant options from return value"""
     engine.say("Haben Sie besondere Vorlieben?")
     engine.runAndWait()
+    print("Haben Sie besondere Vorlieben?")
     satz = my_listen(source, engine, r)
     satz = string_works(satz, german_stop_set)
     menue = analyse_menue(satz)
@@ -216,9 +216,9 @@ def menue_dialog(engine, source, r, german_stop_set):
         engine.runAndWait()
         menue_dialog(engine, source, r, german_stop_set)
     
-    engine.say("Da haben wir" + menue + ".")
+    engine.say("Da haben wir " + menue + ".")
     engine.runAndWait()
-    print("Da haben wir" + menue + ".")
+    print("Da haben wir " + menue + ".")
 
 
 def say_begruessung(engine):
@@ -338,15 +338,15 @@ def main():
 
         say_kommt(engine)
         # debug print
+        product = pizza.get_product()
         sorte = pizza.get_sorte()
         extra = pizza.get_extra()
         out = pizza.get_out()
         boden = pizza.get_boden()
-        print(sorte, extra, out, boden)
+        print(product, sorte, extra, out, boden)
 
 
 # %%
 main()
 
 # %%
-

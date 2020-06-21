@@ -51,6 +51,8 @@ MENUEGRAMMAR = CFG.fromstring("""
     S -> M
     S -> MB
     S -> O
+    S -> NEIN
+    NEIN -> 'nein'
     VEG -> 'vegetarisch'|'vegetarisches'
     VEG -> 'fleisch'
     M -> 'mit' MB
@@ -59,8 +61,9 @@ MENUEGRAMMAR = CFG.fromstring("""
     M -> 'mit' M
     O -> 'ohne' OB
     O -> 'ohne' VEG
-    O -> 'kein' OB
     O -> 'kein' VEG
+    O -> 'kein'|'keine' OB
+    O -> 'kein'|'keine' VEG
     MB -> MB MB
     MB -> 'salami'|'schinken'|'ananas'|'tomate'|'peperoni'|'käse'|'spinat'|'oliven'|'peperonis'|'pepperoni'
     OB -> OB OB
@@ -85,6 +88,7 @@ ALLESGRAMMAR = CFG.fromstring("""
 S -> JA
 S -> NEIN
 S -> M
+S -> MB
 S -> O
 NEIN -> 'nein'|'nö'|'nee'
 JA -> 'ja'|'jo'|'jep'
