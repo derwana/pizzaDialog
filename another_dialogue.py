@@ -21,7 +21,7 @@ def generate_custom_stop_set():
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
-    needed_words = ['mit', 'ohne', 'kein', 'extra', 'nicht']
+    needed_words = ['mit', 'ohne', 'kein', 'extra', 'nicht', 'oder']
     german_stop_set = [word for word in german_stop_set if word not in needed_words]
 
     return german_stop_set
@@ -113,6 +113,21 @@ def analyse(text, pizza, engine, source, r, german_stop_set):
                 pizza.set_boden(pos[0])
             if pos[1] == "MENUE":
                 menue_dialog(engine, source, r, german_stop_set)
+            if pos[1] == "ODER":
+                op1 = ""
+                op2 = ""
+                for pos1 in unnoetig:
+                    if pos1[1] == "PRODUCT1":
+                        op1 = pos1[0]
+                    if pos1[1] == "PRODUCT2":
+                        op2 = pos1[0]
+                engine.say("Moechten Sie lieber " + op1 + " oder " + op2 + "?")
+                engine.runAndWait()
+                print("Moechten Sie lieber " + op1 + " oder " + op2 + "?")
+                satz = my_listen(source, engine, r)
+                satz = string_works(satz, german_stop_set)
+                analyse(satz, pizza, engine, source, r, german_stop_set)
+
 
 
 def analyse_boden(text, pizza):

@@ -23,6 +23,7 @@ S -> P B
 S -> P M
 S -> P
 S -> PRODUCT
+S -> PRODUCT1 ODER PRODUCT2
 PRODUCT -> 'pizza'|'pizzabrötchen'|'calzone'
 P -> SORTE
 SORTE -> 'salami'|'hawaii'|'margaritha'|'spinat'|'margarita'|'margherita'|'spinatpizza'|'funghi'
@@ -42,6 +43,9 @@ B -> 'mit' BODENART
 BODENART -> 'dünnem' BODEN|'dickem' BODEN
 BODEN -> 'boden'
 MENUE -> 'was'|'welche'|'menue'|'menü'
+ODER -> 'oder'
+PRODUCT1 -> 'pizza'|'pizzabrötchen'|'calzone'
+PRODUCT2 -> 'pizza'|'pizzabrötchen'|'calzone'
 """)
 PARSER = nltk.ChartParser(GRAMMAR)
 
