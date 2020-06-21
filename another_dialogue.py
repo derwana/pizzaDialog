@@ -17,7 +17,7 @@ def generate_custom_stop_set():
     german_stop_words = stopwords.words('german')
     german_stop_words.extend(('sie', 'bitte', 'guten', 'morgen', 'möchte', 'hätte', 'hallo', 'bestellen', 'her', 'gib',
                               'mir', 'ne', 'will', 'drauf', 'darauf', 'danke', 'gerne', 'können', 'zeigen', 'nehmen',
-                              'sehen', 'nehme', 'tag'))
+                              'sehen', 'nehme', 'tag', 'lieber'))
     # make it a set to be faster
     german_stop_set = set(german_stop_words)
     # remove some needed stopwords from set
