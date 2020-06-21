@@ -1,0 +1,63 @@
+Guten Morgen!
+Hallo ich würde gerne eine Pizza bestellen
+[[('pizza', 'PRODUCT')]]
+[False, False, True]
+Was fuer eine?
+ich hätte gerne eine Spinat Pizza mit extra Käse und ohne Oliven
+[[('spinat', 'SORTE'), ('pizza', 'PRODUCT'), ('mit', 'M'), ('extra', 'M'), ('käse', 'MBELAG'), ('ohne', 'O'), ('oliven', 'OBELAG')]]
+Noch etwas?
+nein danke
+Die Pizza wird Ihnen in 5 Minuten geliefert.
+pizza spinat ['käse'] ['oliven'] normal
+
+Hallo!
+guten Tag
+[False, False, False]
+Was wollen Sie bestellen? Wir haben Pizza, Pizzabroetchen und Calzone.
+ich hätte gerne eine Calzone
+[[('calzone', 'PRODUCT')]]
+Welche Sorte haetten Sie denn gerne?
+kann ich das Menü sehen
+[[('menü', 'MENUE')]]
+Haben Sie besondere Vorlieben?
+ich möchte Ananas
+Da haben wir Hawaii.
+Was fuer eine Sorte wollen Sie denn?
+dann nehme ich Hawaii
+[[('hawaii', 'SORTE')]]
+Haben Sie noch einen Wunsch?
+nein danke
+Gut, kommt.
+calzone hawaii [] [] normal
+
+Hallo, was kann ich fuer Sie tun?
+Hallo ich würde gerne das Menü sehen
+[[('menü', 'MENUE')]]
+Haben Sie besondere Vorlieben?
+ich möchte kein Fleisch
+Da haben wir Margherita, Spinat, Funghi.
+[False, False, False]
+Was wollen Sie bestellen? Wir haben Pizza, Pizzabroetchen und Calzone.
+ich hätte gerne eine Pizza Margarita
+[[('pizza', 'PRODUCT'), ('margarita', 'SORTE')]]
+Haben Sie noch einen Wunsch?
+ich hatte gerne extra Käse
+Kann ich noch etwas fuer Sie tun?
+nein danke
+Gut, kommt.
+pizza margarita ['käse'] [] normal
+
+Hallo!
+ich hätte gerne eine Pizza oder Calzone
+[[('pizza', 'PRODUCT1'), ('oder', 'ODER'), ('calzone', 'PRODUCT2')]]
+Moechten Sie lieber pizza oder calzone?
+ich möchte lieber Calzone
+[[('calzone', 'PRODUCT')]]
+[False, False, True]
+Welche Sorte haetten Sie denn gerne?
+ich hätte gerne Spinat
+[[('spinat', 'SORTE')]]
+Noch etwas?
+nein danke
+Ihre Pizza wird in 5 Minuten geliefert!
+calzone spinat [] [] normal
